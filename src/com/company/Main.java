@@ -9,10 +9,10 @@ import javax.swing.*;
 public class Main {
 
     public static void main(String[] args) {
-	// write your code here
-        MinesweeperModel model=new MinesweeperModel();
-        Controller controller=new Controller(model);
-        JFrame frame=new MinesweeperView(controller,model);
+        // write your code here
+        MinesweeperModel model = new MinesweeperModel();
+        Controller controller = new Controller(model);
+        JFrame frame = new MinesweeperView(controller, model);
 
     }
 }

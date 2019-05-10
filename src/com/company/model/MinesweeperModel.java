@@ -13,46 +13,46 @@ public class MinesweeperModel {
     private int columCount;//число столбцов
     private int mineCount;//Количество мин
 
-    public MinesweeperModel(){
-        rowCount=9;
-        columCount=9;
+    public MinesweeperModel() {
+        rowCount = 9;
+        columCount = 9;
     }
 
     //Устанавливаем свойство игры, площадь игрового поля
-    public void setSpecifications(int row,int colum) {
-        rowCount=row;
-        columCount=colum;
+    public void setSpecifications(int row, int colum) {
+        rowCount = row;
+        columCount = colum;
     }
 
     //Инициализация игры
-    public void StartGame(){
-        if(rowCount==9)
-            mineCount=10;
-        else if(rowCount==16)
-            if(columCount==16)
-                mineCount=40;
+    public void StartGame() {
+        if (rowCount == 9)
+            mineCount = 10;
+        else if (rowCount == 16)
+            if (columCount == 16)
+                mineCount = 40;
             else
-                mineCount=99;
-        this.gameOver=false;
-        this.firstStep=true;
-        this.finishGame=false;
-        cellsTable=new MinesweeperCell[rowCount][columCount];
-        for(int i=0;i<rowCount;i++){
-            for(int j=0;j<columCount;j++){
-                cellsTable[i][j]=new MinesweeperCell(i,j);
+                mineCount = 99;
+        this.gameOver = false;
+        this.firstStep = true;
+        this.finishGame = false;
+        cellsTable = new MinesweeperCell[rowCount][columCount];
+        for (int i = 0; i < rowCount; i++) {
+            for (int j = 0; j < columCount; j++) {
+                cellsTable[i][j] = new MinesweeperCell(i, j);
             }
         }
     }
 
     //Получение ячейки поля
-    public MinesweeperCell getCell(int row,int colum){
-        if(row<0||colum<0||row>=rowCount||colum>=columCount)
+    public MinesweeperCell getCell(int row, int colum) {
+        if (row < 0 || colum < 0 || row >= rowCount || colum >= columCount)
             return null;
         return cellsTable[row][colum];
     }
 
     //Возвращает проигрыш или нет
-    public boolean isGameOver(){
+    public boolean isGameOver() {
         return gameOver;
     }
 
@@ -62,37 +62,37 @@ public class MinesweeperModel {
     }
 
     //Следующий тип клетки при нажатие на правую кнопку мыши
-    public void nextCellMark(int row,int colum){
-        MinesweeperCell cell=getCell(row,colum);
-        if(cell!=null) {
-            if(cell.getState()=="flagged")
+    public void nextCellMark(int row, int colum) {
+        MinesweeperCell cell = getCell(row, colum);
+        if (cell != null) {
+            if (cell.getState() == "flagged")
                 mineCount++;
             cell.nextMark();
-            if(cell.getState()=="flagged")
+            if (cell.getState() == "flagged")
                 mineCount--;
         }
     }
 
     //Мы победили или нет
-    public boolean isWin(){
-        for(int i=0;i<rowCount;i++){
-            for(int j=0;j<columCount;j++){
-                MinesweeperCell cell=getCell(i,j);
-                String state=cell.getState();
-                if(!cell.isMined()&&(state!="opened"&&state!="flagged"))
+    public boolean isWin() {
+        for (int i = 0; i < rowCount; i++) {
+            for (int j = 0; j < columCount; j++) {
+                MinesweeperCell cell = getCell(i, j);
+                String state = cell.getState();
+                if (!cell.isMined() && (state != "opened" && state != "flagged"))
                     return false;
             }
         }
-        finishGame=true;
+        finishGame = true;
         return true;
     }
 
     //Просматривуют ячейки на поле  или нет
-    public boolean isViewedCell(){
-        for(int i=0;i<rowCount;i++){
-            for(int j=0;j<columCount;j++){
-                MinesweeperCell cell=getCell(i,j);
-                if(cell.isViewed())
+    public boolean isViewedCell() {
+        for (int i = 0; i < rowCount; i++) {
+            for (int j = 0; j < columCount; j++) {
+                MinesweeperCell cell = getCell(i, j);
+                if (cell.isViewed())
                     return true;
             }
         }
@@ -100,28 +100,28 @@ public class MinesweeperModel {
     }
 
     //Открывает ячейку на поле при нажатие на левую кнопку мыши
-    public void openCell(int row,int colum){
-        MinesweeperCell cell=getCell(row,colum);
-        if(cell==null)
+    public void openCell(int row, int colum) {
+        MinesweeperCell cell = getCell(row, colum);
+        if (cell == null)
             return;
         cell.open();
-        if(cell.isMined()){
-            gameOver=true;
-            finishGame=true;
+        if (cell.isMined()) {
+            gameOver = true;
+            finishGame = true;
             return;
         }
 
-        if(firstStep){
-            firstStep=false;
+        if (firstStep) {
+            firstStep = false;
             generateMines();
         }
 
-        if(countMineAroundCell(cell)==0){
-            Vector<MinesweeperCell> neighbours=getCellNeighbours(cell);
-            for(int i=0;i<neighbours.size();i++){
-                MinesweeperCell cellNeighbours=neighbours.get(i);
-                if(cellNeighbours.getState()=="closed"){
-                    openCell(cellNeighbours.getRow(),cellNeighbours.getColum());
+        if (countMineAroundCell(cell) == 0) {
+            Vector<MinesweeperCell> neighbours = getCellNeighbours(cell);
+            for (int i = 0; i < neighbours.size(); i++) {
+                MinesweeperCell cellNeighbours = neighbours.get(i);
+                if (cellNeighbours.getState() == "closed") {
+                    openCell(cellNeighbours.getRow(), cellNeighbours.getColum());
                 }
             }
         }
@@ -129,13 +129,13 @@ public class MinesweeperModel {
     }
 
     //Генерирует мины после первого нажатия на левую кнопку мыши
-    public void generateMines(){
-        for(int i=0;i<mineCount;i++){
-            while (true){
-                int row= (new Random()).nextInt(rowCount);
-                int colum=(new Random()).nextInt(columCount);
-                MinesweeperCell cell=getCell(row,colum);
-                if(!cell.isMined()&&cell.getState()!="opened"){
+    public void generateMines() {
+        for (int i = 0; i < mineCount; i++) {
+            while (true) {
+                int row = (new Random()).nextInt(rowCount);
+                int colum = (new Random()).nextInt(columCount);
+                MinesweeperCell cell = getCell(row, colum);
+                if (!cell.isMined() && cell.getState() != "opened") {
                     cell.setMined(true);
                     break;
                 }
@@ -144,11 +144,11 @@ public class MinesweeperModel {
     }
 
     //Возвращает число мин вокруг  открытой ячейки
-    public int countMineAroundCell(MinesweeperCell cell){
-        int count=0;
-        Vector<MinesweeperCell> neighbours=getCellNeighbours(cell);
-        for(int i=0;i<neighbours.size();i++){
-            if(neighbours.get(i).isMined())
+    public int countMineAroundCell(MinesweeperCell cell) {
+        int count = 0;
+        Vector<MinesweeperCell> neighbours = getCellNeighbours(cell);
+        for (int i = 0; i < neighbours.size(); i++) {
+            if (neighbours.get(i).isMined())
                 count++;
         }
         cell.setCounter(count);
@@ -156,14 +156,14 @@ public class MinesweeperModel {
     }
 
     //Возвращает вектор соседних ячеек для данной ячейки
-    public Vector<MinesweeperCell> getCellNeighbours(MinesweeperCell cell){
-        Vector<MinesweeperCell> neighbours=new Vector<>();
-        int row=cell.getRow();
-        int colum=cell.getColum();
-        for(int i=row-1;i<=row+1;i++){
-            for(int j=colum-1;j<=colum+1;j++){
-                if((i!=row||j!=colum)&&getCell(i,j)!=null){
-                    neighbours.add(getCell(i,j));
+    public Vector<MinesweeperCell> getCellNeighbours(MinesweeperCell cell) {
+        Vector<MinesweeperCell> neighbours = new Vector<>();
+        int row = cell.getRow();
+        int colum = cell.getColum();
+        for (int i = row - 1; i <= row + 1; i++) {
+            for (int j = colum - 1; j <= colum + 1; j++) {
+                if ((i != row || j != colum) && getCell(i, j) != null) {
+                    neighbours.add(getCell(i, j));
                 }
             }
         }

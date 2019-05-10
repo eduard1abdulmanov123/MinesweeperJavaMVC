@@ -15,18 +15,18 @@ public class Controller extends MouseAdapter {
     private MinesweeperCell PastViewedCell;//Предыдущая просматриваемая ячейка
     private boolean dragging;//Движение зажатой левой кнопки мыши
 
-    public Controller(MinesweeperModel model){
-        this.model=model;
+    public Controller(MinesweeperModel model) {
+        this.model = model;
     }
 
     //Добавление в контроллер Представление
-    public void setView(MinesweeperView view){
-        this.view=view;
+    public void setView(MinesweeperView view) {
+        this.view = view;
     }
 
     //Обработка выбора уровня сложности
-    public void selectLevelDifficulty(ItemEvent e){
-        JRadioButtonMenuItem buttonMenuItem=(JRadioButtonMenuItem) e.getSource();
+    public void selectLevelDifficulty(ItemEvent e) {
+        JRadioButtonMenuItem buttonMenuItem = (JRadioButtonMenuItem) e.getSource();
         if (buttonMenuItem.getText().equals("Новичок")) {
             model.setSpecifications(9, 9);
         } else if (buttonMenuItem.getText().equals("Любитель")) {
@@ -39,7 +39,7 @@ public class Controller extends MouseAdapter {
     }
 
     //Начало новый игры, вызывается при нажатие на смайлик, если при изменение уровня сложности
-    public void startNewGame(){
+    public void startNewGame() {
         model.StartGame();
         view.gameField.FieldInitialization();
         view.menuGame.MenuGameInitialization();
@@ -60,10 +60,10 @@ public class Controller extends MouseAdapter {
     //Если мы в зоне , то открываем ячейку и присваеваем PastViewedCell=null и dragging=false
     @Override
     public void mousePressed(MouseEvent e) {
-        if(!model.isFinishGame()) {
+        if (!model.isFinishGame()) {
             Point position = view.gameField.getPosition(e.getX(), e.getY());
             //Если нажата правая кнопка мыши и игра еще не закончена
-            if(position!=null) {
+            if (position != null) {
                 int colum = (int) position.getX();
                 int row = (int) position.getY();
                 MinesweeperCell cell = model.getCell(row, colum);
@@ -72,8 +72,8 @@ public class Controller extends MouseAdapter {
                     view.repaint();
                 }
                 //если нажата левая кнопка мыши,игра не закончена и попал в поле
-                else if(e.getButton() == MouseEvent.BUTTON1&&(cell.getState()=="closed"||cell.getState()=="question")){
-                    PastViewedCell=cell;
+                else if (e.getButton() == MouseEvent.BUTTON1 && (cell.getState() == "closed" || cell.getState() == "question")) {
+                    PastViewedCell = cell;
                     cell.setViewed(true);
                     view.repaint();
                 }
@@ -89,28 +89,28 @@ public class Controller extends MouseAdapter {
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        if(!model.isFinishGame()&&e.getButton()==MouseEvent.BUTTON1){
-            Point position=view.gameField.getPosition(e.getX(),e.getY());
-            if(position!=null) {
+        if (!model.isFinishGame() && e.getButton() == MouseEvent.BUTTON1) {
+            Point position = view.gameField.getPosition(e.getX(), e.getY());
+            if (position != null) {
                 int colum = (int) position.getX();
                 int row = (int) position.getY();
                 MinesweeperCell cell = model.getCell(row, colum);
-                if (cell.getState() =="closed"||cell.getState()=="question"){
+                if (cell.getState() == "closed" || cell.getState() == "question") {
                     model.openCell(row, colum);
                 }
                 cell.setViewed(false);
                 view.repaint();
             }
-            PastViewedCell=null;
+            PastViewedCell = null;
             dragging = false;
         }
     }
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        if(dragging){
-            Point position=view.gameField.getPosition(e.getX(),e.getY());
-            if(position!=null) {
+        if (dragging) {
+            Point position = view.gameField.getPosition(e.getX(), e.getY());
+            if (position != null) {
                 int colum = (int) position.getX();
                 int row = (int) position.getY();
                 MinesweeperCell cellNow = model.getCell(row, colum);
@@ -123,9 +123,9 @@ public class Controller extends MouseAdapter {
                 }
                 return;
             }
-            if(PastViewedCell!=null){
+            if (PastViewedCell != null) {
                 PastViewedCell.setViewed(false);
-                PastViewedCell=null;
+                PastViewedCell = null;
                 view.repaint();
             }
 

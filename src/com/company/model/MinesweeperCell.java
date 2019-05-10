@@ -7,29 +7,30 @@ public class MinesweeperCell {
     private boolean mined;//Мина или нет
     private int counter;//Число мин вокруг ячейки,если она не мина
     private boolean viewed;//Просматривают ячейку или нет
-    private String[] MarkSquence={"closed","flagged","question"};
+    private String[] MarkSquence = {"closed", "flagged", "question"};
 
     //Инициализация по умолчанию
-    public MinesweeperCell(int row,int colum){
-        this.row=row;
-        this.colum=colum;
-        this.state="closed";
-        this.mined=false;
-        this.counter=0;
-        this.viewed=false;
+    public MinesweeperCell(int row, int colum) {
+        this.row = row;
+        this.colum = colum;
+        this.state = "closed";
+        this.mined = false;
+        this.counter = 0;
+        this.viewed = false;
     }
 
     //Переставляет состояния ячейки при нажатие на правую кнопку мыши
-    public void nextMark(){
-        for(int index=0;index<MarkSquence.length;index++){
-            if(state==MarkSquence[index]) {
-                state=MarkSquence[(index+1)%MarkSquence.length];
+    public void nextMark() {
+        for (int index = 0; index < MarkSquence.length; index++) {
+            if (state == MarkSquence[index]) {
+                state = MarkSquence[(index + 1) % MarkSquence.length];
                 break;
             }
         }
     }
-    public void open(){
-        state="opened";
+
+    public void open() {
+        state = "opened";
     }
 
 

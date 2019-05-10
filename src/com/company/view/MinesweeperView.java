@@ -17,17 +17,17 @@ import java.util.Map;
 
 public class MinesweeperView extends JFrame {
 
-    public static final int INTEND=5;//Отступ от JFrame
+    public static final int INTEND = 5;//Отступ от JFrame
     private Controller controller;
     private MinesweeperModel model;
     public GameField gameField;
     public MenuGame menuGame;
-    public Map<String,ImageIcon> hashMapImage;//Хеш-таблица, название изображения-это ключ, значение -это ImageIcon
+    public Map<String, ImageIcon> hashMapImage;//Хеш-таблица, название изображения-это ключ, значение -это ImageIcon
 
 
-    public MinesweeperView(Controller controller,MinesweeperModel model){
-        this.controller=controller;
-        this.model=model;
+    public MinesweeperView(Controller controller, MinesweeperModel model) {
+        this.controller = controller;
+        this.model = model;
         controller.setView(this);
         try {
             LoadImage("assets");
@@ -38,18 +38,18 @@ public class MinesweeperView extends JFrame {
     }
 
     //Основной метод отвечающий за весь Интерфейс,расположение GameField,MenuGame,MenuBar
-    private void createInterface(){
+    private void createInterface() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         setIconImage(hashMapImage.get("titleBomb.png").getImage());
 
-        JPanel panel=new JPanel();
-        panel.setLayout(new BorderLayout(INTEND,INTEND));
-        panel.setBorder(new EmptyBorder(INTEND,INTEND,INTEND,INTEND));
-        gameField=new GameField(model,controller,this);
-        menuGame=new MenuGame(model,this,controller);
-        panel.add(menuGame,BorderLayout.NORTH);
-        panel.add(gameField,BorderLayout.CENTER);
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout(INTEND, INTEND));
+        panel.setBorder(new EmptyBorder(INTEND, INTEND, INTEND, INTEND));
+        gameField = new GameField(model, controller, this);
+        menuGame = new MenuGame(model, this, controller);
+        panel.add(menuGame, BorderLayout.NORTH);
+        panel.add(gameField, BorderLayout.CENTER);
         getContentPane().add(panel);
         setJMenuBar(createMenuBar());
         pack();
@@ -87,13 +87,12 @@ public class MinesweeperView extends JFrame {
 
     //Загружаем все изображения
     private void LoadImage(String path) throws IOException {
-        hashMapImage=new HashMap<String, ImageIcon>();
+        hashMapImage = new HashMap<String, ImageIcon>();
         File dir = new File(path);
         File[] files = dir.listFiles();
-        for(int i=0;i<files.length;i++){
-            BufferedImage image=ImageIO.read(files[i]);
+        for (int i = 0; i < files.length; i++) {
+            BufferedImage image = ImageIO.read(files[i]);
             hashMapImage.put(files[i].getName(), new ImageIcon(image));
         }
     }
-
 }
